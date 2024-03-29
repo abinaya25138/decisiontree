@@ -1,0 +1,42 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+dataset = pd.read_csv("D:\Data Sets\petrol_consumption.csv")
+
+dataset.head()
+
+dataset.describe()
+
+X = dataset.drop('Petrol_Consumption', axis=1)
+y = dataset['Petrol_Consumption']
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+from sklearn.tree import DecisionTreeRegressor
+regressor = DecisionTreeRegressor()
+regressor.fit(X_train, y_train)
+
+y_pred = regressor.predict(X_test)
+
+
+#compare some of our predicted values with the actual values
+df=pd.DataFrame({'Actual':y_test, 'Predicted':y_pred})
+df
+
+
+#To evaluate performance of the regression algorithm
+from sklearn import metrics
+print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+
+
+
+
+#The mean absolute error for our algorithm is 54.7,
+#which is less than 10 percent of the mean of all the values 
+#in the 'Petrol_Consumption' column.
+#This means that our algorithm did a fine prediction job.
